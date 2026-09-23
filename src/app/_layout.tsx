@@ -1,8 +1,8 @@
 import { allRoutes } from '@/constants/Routes';
 import { useTheme } from '@/hooks/use-theme';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { ThemeChangerProvider } from '@/presentation/context/ThemeChangerContext';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import '../global.css';
 
@@ -10,10 +10,10 @@ SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
   const bgColor = useTheme().background;
-  const colorScheme = useColorScheme();
+
   return (
     <GestureHandlerRootView style={{ backgroundColor: bgColor, flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ThemeChangerProvider>
         <Stack
           screenOptions={{
             headerShadowVisible: false,
@@ -35,7 +35,7 @@ export default function TabLayout() {
               <Stack.Screen
                 key={route.name}
                 name={route.name}
-                options={{ title: route.title }}
+                options={{ title: route.title, headerShown: !route.title.includes('Slides') }}
               />
             ))
           }
@@ -44,7 +44,7 @@ export default function TabLayout() {
         {/* <ThemedView margin>
           <ThemedText type='h1' className='mt-20'>hola kjsahdsa</ThemedText>
         </ThemedView> */}
-      </ThemeProvider>
+      </ThemeChangerProvider>
     </GestureHandlerRootView>
   );
 }
